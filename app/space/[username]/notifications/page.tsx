@@ -1,6 +1,14 @@
+"use client"
 import NotificationsBox from "@/components/NotificationBox";
+import { useNotifications } from "@/hooks/useNotifications";
+import { usePathname } from "next/navigation";
 
 export default function NotificationsPage(){
+    const path = usePathname()
+    const segment = path ? path.split('/') : []
+    const username = segment[2] || '';
+    const {data ,isLoading, isError, isPending} = useNotifications(username)
+    console.log(data)
     return (
         <div className="border rounded-lg px-2 py-4  mt-6" >
           <div className="w-[98%] m-auto">
@@ -10,7 +18,7 @@ export default function NotificationsPage(){
             <p>Overview of all your notifications.</p>
           </div>
 
-          <NotificationsBox/>
+          <NotificationsBox notifications={data} />
         </div>
     )
 }

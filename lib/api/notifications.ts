@@ -12,7 +12,7 @@ export async function getLatestNotifications(username:string,lastNotificationId:
 }
 
 export async function getNotifications(username:string):Promise<any>{
-    const {data} = await axios.post("http://localhost:3001/user/notification'",{
+    const {data} = await axios.post("http://localhost:3001/user/notification",{
         username:username,
        
     })

@@ -11,8 +11,8 @@ export default function RepositoriesPage(){
     const username = segment[2] || '';
 
 
-    const {data} = useGetRepos(username)
-    console.log(data)
+    const {data, isError , isLoading, isSuccess} = useGetRepos(username)
+    console.log(data?.repos)
 
     return (
         <div  className="border rounded-lg  py-4 mt-6">
@@ -22,13 +22,13 @@ export default function RepositoriesPage(){
             <h1 className="text-2xl font-semibold">
             Repositories
             </h1>
-            <p>Overview of all your repositories.</p>
+            <p>Overview of all subscribed your repositories.</p>
             </div>
-            <AddRepositories/>
+            <AddRepositories username={username}/>
            </div>
 
             <div className="w-[96%] mx-auto">
-                <RepositoriesTable/>
+                <RepositoriesTable repos={data?.repos} username={username}/>
             </div>
 
         </div>

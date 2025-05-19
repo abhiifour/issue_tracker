@@ -1,3 +1,4 @@
+"use client"
 import RepositoriesTable from "@/components/RepositoriesTable";
 
 export default function SubscriptionsPage(){
@@ -13,7 +14,7 @@ export default function SubscriptionsPage(){
    
 
         <div className="w-[98%] mx-auto">
-            <RepositoriesTable/>
+            {/* <RepositoriesTable/> */}
         </div>
 
     </div>

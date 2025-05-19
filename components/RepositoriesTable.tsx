@@ -16,17 +16,38 @@ DropdownMenuSeparator,
 DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical } from "lucide-react"
+import { useUnsubscribeToRepo } from "@/hooks/useRepositories"
 
 
+interface Repositories{
+    id:number,
+    name:string,
+    owner:string,
+    lastIssueId:string,
+    lastIssueUpdatedAt:string
+}
 
-export default function RepositoriesTable(){
+interface RepositoriesTableProps{
+    repos: Repositories[],
+    username:string
+}
+
+
+export default function RepositoriesTable({repos,username}:RepositoriesTableProps){
+
+    const {mutate, isError,isPending} = useUnsubscribeToRepo()
+
+    const toDate = (issueDate:string) => {
+        const date = new Date(issueDate)
+        return date;
+    }
+
     return (
         <div>
             <Table>
             <TableCaption>Thats all 🎉</TableCaption>
             <TableHeader>
                 <TableRow>
-                <TableHead className="w-[6px]"></TableHead>
                 <TableHead className="text-left">Name</TableHead>
                 <TableHead>Owner</TableHead>
                 <TableHead>Last issue id</TableHead>
@@ -35,56 +56,28 @@ export default function RepositoriesTable(){
                 
                 </TableRow>
             </TableHeader>
+
             <TableBody>
-                <TableRow>
-                <TableCell className="">*</TableCell>
-                <TableCell className="font-medium text-left">Formbricks</TableCell>
-                <TableCell>FormbricksHQ</TableCell>
-                <TableCell className="">947545</TableCell>
-                <TableCell className="text-right">12 May 2025</TableCell>
+            {
+                repos?.map((repo:Repositories) =>   <TableRow key={repo.id}>
+                <TableCell className="font-medium text-left">{repo.name}</TableCell>
+                <TableCell>{repo.owner}</TableCell>
+                <TableCell className="">{repo.lastIssueId}</TableCell>
+                <TableCell className="text-right">{toDate(repo.lastIssueUpdatedAt).toLocaleDateString()}</TableCell>
                 
                 <DropdownMenu>
                 <TableCell className="text-right cursor-pointer"><DropdownMenuTrigger><EllipsisVertical size={12}/></DropdownMenuTrigger></TableCell>       
                 <DropdownMenuContent>
-                    <DropdownMenuItem>Subscribe</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => mutate({owner:repo.owner,name:repo.name,username:username})}>Unsubscribe</DropdownMenuItem>
                     <DropdownMenuItem>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
                 </DropdownMenu>
 
-                </TableRow>
+                </TableRow>)
+            }
+
             </TableBody>
-            <TableBody>
-                <TableRow>
-                <TableCell className="">*</TableCell>
-                <TableCell className="font-medium text-left">Keyshade</TableCell>
-                <TableCell>Keyshade.xyz</TableCell>
-                <TableCell>04850435</TableCell>
-                <TableCell className="text-right">19 May 2025</TableCell>
-                <DropdownMenu>
-                <TableCell className="text-right cursor-pointer"><DropdownMenuTrigger><EllipsisVertical size={12}/></DropdownMenuTrigger></TableCell>       
-                <DropdownMenuContent>
-                    <DropdownMenuItem>Subscribe</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
-                </DropdownMenuContent>
-                </DropdownMenu>
-                </TableRow>
-            </TableBody>
-            <TableBody>
-                <TableRow>
-                <TableCell className="">*</TableCell>
-                <TableCell className="font-medium text-left">Openstatus</TableCell>
-                <TableCell>OpenstatusHq</TableCell>
-                <TableCell>131243</TableCell>
-                <TableCell className="text-right">14 May 2025</TableCell>
-                <DropdownMenu>
-                <TableCell className="text-right cursor-pointer"><DropdownMenuTrigger><EllipsisVertical size={12}/></DropdownMenuTrigger></TableCell>       
-                <DropdownMenuContent>
-                    <DropdownMenuItem>Subscribe</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
-                </DropdownMenuContent>
-                </DropdownMenu>
-                </TableRow>
-            </TableBody>
+            
             </Table>
 
         </div>

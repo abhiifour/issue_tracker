@@ -1,7 +1,9 @@
 "use client"
 
+import { login } from "@/lib/api/user"
 import { useSession } from "next-auth/react"
 import { redirect, usePathname, useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function SpacePage(){
     const { data: session, status } = useSession()
@@ -9,6 +11,19 @@ export default function SpacePage(){
    
     const router = useRouter()
     const path = usePathname()
+
+    const handleLogin = async () => {
+        await login(
+            username || '',
+            session?.user?.email || '',
+            session?.user?.image || ''
+        )
+    }
+
+    useEffect(() => {
+       handleLogin()
+    },[])
+    
     
     
     if (status === "loading") {

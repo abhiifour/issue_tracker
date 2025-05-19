@@ -18,12 +18,12 @@ export function useSubscribeToRepo() {
     const queryClient = useQueryClient();
   
     return useMutation({
-      mutationFn: ({ username, repoId }: { username: string; repoId: number }) =>
-        subscribeRepository(username, repoId),
+      mutationFn: ({ username, name , owner }: { username: string;  name: string; owner:string }) =>
+        subscribeRepository(username, name,owner),
   
-      onSuccess: (_, { username, repoId }) => {
+      onSuccess: (_, { username, name , owner }) => {
         // Update the cache or refetch subscription status
-        queryClient.invalidateQueries({ queryKey: ['subscription', username, repoId] });
+        queryClient.invalidateQueries({ queryKey: ['subscription', username, name, owner] });
         queryClient.invalidateQueries({ queryKey: ['repositories', username] });
       },
     });
@@ -48,12 +48,12 @@ export function useUnsubscribeToRepo() {
     const queryClient = useQueryClient();
   
     return useMutation({
-      mutationFn: ({ username, repoId }: { username: string; repoId: number }) =>
-        unsubscribeRepository(username, repoId),
+      mutationFn: ({ username, name, owner }: { username: string; name: string; owner:string }) =>
+        unsubscribeRepository(username, name,owner),
   
-      onSuccess: (_, { username, repoId }) => {
+      onSuccess: (_, { username, name, owner }) => {
         // Update the cache or refetch subscription status
-        queryClient.invalidateQueries({ queryKey: ['subscription', username, repoId] });
+        queryClient.invalidateQueries({ queryKey: ['subscription', username, name , owner] });
         queryClient.invalidateQueries({ queryKey: ['repositories', username] });
       },
     });
